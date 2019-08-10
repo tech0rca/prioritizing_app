@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prioritizing_app/custom_dialog.dart';
 import 'package:prioritizing_app/model/task.dart';
 
 class ListPage extends StatefulWidget {
@@ -7,13 +8,13 @@ class ListPage extends StatefulWidget {
 
   final String title;
 
+  
+
   @override
   _ListPageState createState() => _ListPageState();
 }
 
 class _ListPageState extends State<ListPage> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,34 +35,16 @@ Widget topAppBar(BuildContext context) {
       IconButton(
           icon: Icon(Icons.add),
           onPressed: () {
-            alertInputDialog(context);
+            showDialog(
+              context: context,
+              builder: (_) => new CustomDialog(),
+            );
           })
     ],
   );
 }
 
-alertInputDialog(BuildContext context) {
-  TextEditingController inputController = new TextEditingController();
-  return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Name"),
-          content: TextField(
-            controller: inputController,
-          ),
-          actions: <Widget>[
-            MaterialButton(
-              elevation: 5.0,
-              child: Text("Submit"),
-              onPressed: () {
 
-              },
-            )
-          ],
-        );
-      });
-}
 
 final makeBottom = Container(
   height: 55.0,
