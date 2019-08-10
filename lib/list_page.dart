@@ -12,30 +12,56 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
-      appBar: topAppBar,
+      appBar: topAppBar(context),
       body: BodyLayout(),
       bottomNavigationBar: makeBottom,
     );
   }
 }
 
-final topAppBar = AppBar(
-  elevation: 0.1,
-  backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
-  title: Text('Tasks'),
-  actions: <Widget>[
-    IconButton(
-      icon: Icon(Icons.add),
-      onPressed: () {
-        // TODO: Add a new Task
-      },
-    )
-  ],
-);
+Widget topAppBar(BuildContext context) {
+  return new AppBar(
+    elevation: 0.1,
+    backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
+    title: Text('Tasks'),
+    actions: <Widget>[
+      IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () {
+            alertInputDialog(context);
+          })
+    ],
+  );
+}
+
+alertInputDialog(BuildContext context) {
+  TextEditingController inputController = new TextEditingController();
+  return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Name"),
+          content: TextField(
+            controller: inputController,
+          ),
+          actions: <Widget>[
+            MaterialButton(
+              elevation: 5.0,
+              child: Text("Submit"),
+              onPressed: () {
+
+              },
+            )
+          ],
+        );
+      });
+}
 
 final makeBottom = Container(
   height: 55.0,
@@ -65,60 +91,6 @@ class BodyLayout extends StatelessWidget {
 }
 
 Widget _taskListView(BuildContext context) {
-  final europeanCountries = [
-    'Albania',
-    'Andorra',
-    'Armenia',
-    'Austria',
-    'Azerbaijan',
-    'Belarus',
-    'Belgium',
-    'Bosnia and Herzegovina',
-    'Bulgaria',
-    'Croatia',
-    'Cyprus',
-    'Czech Republic',
-    'Denmark',
-    'Estonia',
-    'Finland',
-    'France',
-    'Georgia',
-    'Germany',
-    'Greece',
-    'Hungary',
-    'Iceland',
-    'Ireland',
-    'Italy',
-    'Kazakhstan',
-    'Kosovo',
-    'Latvia',
-    'Liechtenstein',
-    'Lithuania',
-    'Luxembourg',
-    'Macedonia',
-    'Malta',
-    'Moldova',
-    'Monaco',
-    'Montenegro',
-    'Netherlands',
-    'Norway',
-    'Poland',
-    'Portugal',
-    'Romania',
-    'Russia',
-    'San Marino',
-    'Serbia',
-    'Slovakia',
-    'Slovenia',
-    'Spain',
-    'Sweden',
-    'Switzerland',
-    'Turkey',
-    'Ukraine',
-    'United Kingdom',
-    'Vatican City'
-  ];
-
   final List<Task> taskList = [];
   Task task4 = new Task(
       taskName: 'A low priority task',
