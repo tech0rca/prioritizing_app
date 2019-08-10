@@ -21,7 +21,7 @@ class _CustomDialogState extends State<CustomDialog> {
   @override
   Widget build(BuildContext context) {
         return AlertDialog(
-          title: Text("Name"),
+          title: Text("Task name"),
           content: Column(
             children: <Widget>[
               TextField(
@@ -33,7 +33,7 @@ class _CustomDialogState extends State<CustomDialog> {
                 onChanged: radioButtonChanges,
               ),
               new Text(
-                'Carnivore',
+                'Low',
                 style: new TextStyle(fontSize: 16.0),
               ),
               new Radio(
@@ -42,7 +42,7 @@ class _CustomDialogState extends State<CustomDialog> {
                 onChanged: radioButtonChanges,
               ),
               new Text(
-                'Herbivore',
+                'Medium',
                 style: new TextStyle(
                   fontSize: 16.0,
                 ),
@@ -53,7 +53,16 @@ class _CustomDialogState extends State<CustomDialog> {
                 onChanged: radioButtonChanges,
               ),
               new Text(
-                'Omnivore',
+                'High',
+                style: new TextStyle(fontSize: 16.0),
+              ),
+              new Radio(
+                value: Priority.urgent,
+                groupValue: _chosenPriority,
+                onChanged: radioButtonChanges,
+              ),
+              new Text(
+                'Urgent',
                 style: new TextStyle(fontSize: 16.0),
               ),
             ],
