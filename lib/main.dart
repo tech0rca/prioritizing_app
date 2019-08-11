@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Color.fromRGBO(58, 66, 86, 1.0),
         primarySwatch: Colors.blue,
       ),
-      home: ListPage(title: 'Tasks'),
+      home: ListPage(),
     );
   }
 }

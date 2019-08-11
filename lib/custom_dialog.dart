@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prioritizing_app/data_service.dart';
 
+import 'list_page.dart';
 import 'model/task.dart';
 
 class CustomDialog extends StatefulWidget {
@@ -71,7 +73,14 @@ class _CustomDialogState extends State<CustomDialog> {
             MaterialButton(
               elevation: 5.0,
               child: Text("Submit"),
-              onPressed: () {},
+              onPressed: () {
+                Task newTask = new Task(taskName: inputController.text, dueDate: DateTime.now(), priority: _chosenPriority);
+                DataService dataService = new DataService();
+                dataService.addTask(newTask);
+                Navigator.pop(
+                  context, newTask
+                );
+              },
             )
           ],
         );
