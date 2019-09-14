@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class Task {
-  final String taskName;
-  final DateTime dueDate;
-  final Priority priority;
 
-  Task({
-    @required this.taskName,
-    @required this.dueDate,
-    @required this.priority,
-  });
+class Task {
+  String id;
+  String taskName;
+  DateTime dueDate;
+  Priority priority;
+
+  Task();
+
 
   get getTaskName => taskName;
 
@@ -28,15 +27,25 @@ class Task {
       case Priority.urgent:
         return Colors.red;
         break;
-           
     }
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'taskname': taskName,
+      'dueDate': dueDate.toString(),
+      'priority': priority.toString()
+    };
+  }
+
+  Task.fromMap(Map<String, dynamic> map) {
+    //TODO: Deserializing funktioniert noch nicht
+    id = map[0];
+    taskName = map[taskName];
+    dueDate = map[dueDate];
+    priority = map[priority];
+  }
 }
 
-enum Priority {
-  low,
-  medium,
-  high,
-  urgent
-}
+enum Priority { low, medium, high, urgent }

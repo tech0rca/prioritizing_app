@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prioritizing_app/data_service.dart';
+import 'package:prioritizing_app/database_helper.dart';
+import 'package:uuid/uuid.dart';
 
 import 'list_page.dart';
 import 'model/task.dart';
@@ -74,9 +76,15 @@ class _CustomDialogState extends State<CustomDialog> {
               elevation: 5.0,
               child: Text("Submit"),
               onPressed: () {
-                Task newTask = new Task(taskName: inputController.text, dueDate: DateTime.now(), priority: _chosenPriority);
-                DataService dataService = new DataService();
-                dataService.addTask(newTask);
+                Task newTask = new Task();
+                newTask.id = new Uuid().v4();
+                newTask.dueDate = DateTime.parse("1969-07-20 20:18:04Z");
+                newTask.taskName = inputController.text;
+                newTask.priority = _chosenPriority;
+                DatabaseHelper db = DatabaseHelper.instance;
+                Future<int> id = db.insert(newTask);
+                print('inserting data');
+                id.then((val) => print(val));
                 Navigator.pop(
                   context, newTask
                 );

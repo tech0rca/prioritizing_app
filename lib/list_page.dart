@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:prioritizing_app/app_builder.dart';
 import 'package:prioritizing_app/custom_dialog.dart';
 import 'package:prioritizing_app/data_service.dart';
+import 'package:prioritizing_app/database_helper.dart';
 import 'package:prioritizing_app/model/task.dart';
+import 'package:sqflite/sqlite_api.dart';
 
 class ListPage extends StatelessWidget {
   ListPage({Key key, this.task}) : super(key: key);
   final Task task;
 
   DataService dataService = new DataService();
+  DatabaseHelper db = DatabaseHelper.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +20,7 @@ class ListPage extends StatelessWidget {
       return Scaffold(
         backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
         appBar: topAppBar(context),
-        body: _taskListView(context, dataService.getTaskList()),
+        body: _taskListView(context),
         bottomNavigationBar: makeBottom,
       );
     });
@@ -36,7 +39,7 @@ class ListPage extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => CustomDialog()),
               );
-              AppBuilder.of(context).rebuild();
+              //AppBuilder.of(context).rebuild();
             })
       ],
     );
@@ -62,27 +65,50 @@ class ListPage extends StatelessWidget {
     ),
   );
 
-  Widget _taskListView(BuildContext context, List<Task> taskList) {
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        return Card(
-            color: taskList[index].returnPriorityColor(),
-            child: Padding(
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    taskList[index].getTaskName,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w200),
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.all(10.0),
-            ));
+  Widget _taskListView(
+      BuildContext context) {
+    return FutureBuilder<List<Task>>(
+      future: db.getAllTasks(),
+      builder: (BuildContext context, AsyncSnapshot<List<Task>> snapshot) {
+
+      switch (snapshot.connectionState) {
+        case ConnectionState.none:
+          return Text('Press button to start.');
+        case ConnectionState.active:
+        case ConnectionState.waiting:
+          return Text('Awaiting result...');
+        case ConnectionState.done:
+          if (snapshot.hasError)
+            return Text('Error: ${snapshot.error}', style: new TextStyle(color: Colors.white),);
+          return ListView.builder(
+            itemCount: snapshot.data.length,
+            key: key,
+            itemBuilder: (context, index) {
+              return Dismissible(
+                  child: Card(
+                      color: snapshot.data[index].returnPriorityColor(),
+                      child: Padding(
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              snapshot.data[index].getTaskName,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w200),
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(10.0),
+                      )),
+                  key: new Key(snapshot.data[index].id),
+                  onDismissed: (direction) {
+                    dataService.removeTask(snapshot.data[index]);
+                  });
+            },
+          );
+      }
       },
-      itemCount: taskList.length,
     );
   }
 }
