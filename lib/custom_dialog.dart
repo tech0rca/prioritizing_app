@@ -76,11 +76,7 @@ class _CustomDialogState extends State<CustomDialog> {
               elevation: 5.0,
               child: Text("Submit"),
               onPressed: () {
-                Task newTask = new Task();
-                newTask.id = new Uuid().v4();
-                newTask.dueDate = DateTime.parse("1969-07-20 20:18:04Z");
-                newTask.taskName = inputController.text;
-                newTask.priority = _chosenPriority;
+                Task newTask = new Task(null, inputController.text, DateTime.parse("1969-07-20 20:18:04Z"), _chosenPriority);
                 DatabaseHelper db = DatabaseHelper.instance;
                 Future<int> id = db.insert(newTask);
                 print('inserting data');

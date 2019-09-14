@@ -37,7 +37,7 @@ class DatabaseHelper {
 
   Future _onCreate(Database db, int version) async {
         await db.execute('''CREATE TABLE tasks(
-          id TEXT PRIMARY KEY,
+          id INTEGER PRIMARY KEY,
           taskName TEXT,
           dueDate TEXT,
           priority TEXT
@@ -65,20 +65,23 @@ class DatabaseHelper {
 
   Future<List<Task>> getAllTasks() async {
     Database db = await database;
-    List<Map> maps = await db.query(DatabaseHelper._tableName);
+    List<Map> maps = await db.query(DatabaseHelper._tableName, columns: ['id', 'taskName', 'dueDate', 'priority']);
     
-    List<Task> taskList = new List();
+    List<Task> taskList = [];
     if (maps.length > 0 ) {
-      maps.forEach((val) => doIterate(taskList, val));
+      for (int i = 0; i<maps.length; i++) {
+        taskList.add(Task.fromMap(maps[i]));
+      }
     
       taskList.sort((task1, task2) => task1.priority.index.compareTo(task2.priority.index));
       taskList = taskList.reversed.toList();
       return taskList;
     }
-    }
+  }
 
-  Set<void> doIterate(List<Task> taskList, Map val) {
-      taskList.add(Task.fromMap(val));
+  Future<int> delete(int id) async {
+    Database db = await database;
+    return await db.delete(DatabaseHelper._tableName, where: '$id = ?', whereArgs: [id]);
   }
 
 

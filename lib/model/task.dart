@@ -3,12 +3,12 @@ import 'package:flutter/widgets.dart';
 
 
 class Task {
-  String id;
+  int id;
   String taskName;
   DateTime dueDate;
   Priority priority;
 
-  Task();
+  Task(this.id, this.taskName, this.dueDate, this.priority);
 
 
   get getTaskName => taskName;
@@ -41,10 +41,20 @@ class Task {
 
   Task.fromMap(Map<String, dynamic> map) {
     //TODO: Deserializing funktioniert noch nicht
-    id = map[0];
-    taskName = map[taskName];
-    dueDate = map[dueDate];
-    priority = map[priority];
+    id = map['id'];
+    taskName = map['taskName'];
+    dueDate = DateTime.parse(map['dueDate']);
+    priority = deserializePriority(map['priority']);
+    //priority = Priority.map['priority'];
+  }
+
+  deserializePriority(String statusText) {
+    for (Priority element in Priority.values) {
+      if (element.toString() == statusText) {
+        return element;
+      }
+    }
+    return null;
   }
 }
 

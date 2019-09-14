@@ -7,12 +7,33 @@ import 'package:prioritizing_app/database_helper.dart';
 import 'package:prioritizing_app/model/task.dart';
 import 'package:sqflite/sqlite_api.dart';
 
-class ListPage extends StatelessWidget {
+class ListPage extends StatefulWidget {
   ListPage({Key key, this.task}) : super(key: key);
   final Task task;
 
-  DataService dataService = new DataService();
-  DatabaseHelper db = DatabaseHelper.instance;
+  @override
+  State<StatefulWidget> createState() {
+    return _ListPageState();
+  }
+}
+
+  class _ListPageState extends State<ListPage> {
+  Future<List<Task>> taskListFuture;
+  DatabaseHelper db;
+
+  @override
+  void initState() {
+    super.initState();
+    db = DatabaseHelper.instance;
+    refreshList();
+
+  }
+
+  refreshList() {
+    setState(() {
+      taskListFuture = db.getAllTasks();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +46,24 @@ class ListPage extends StatelessWidget {
       );
     });
   }
+  Widget _taskListView(
+      BuildContext context) {
+    return FutureBuilder<List<Task>>(
+      future: taskListFuture,
+      builder: (BuildContext context, AsyncSnapshot<List<Task>> snapshot) {
+        if (snapshot.hasData) {
+          return dataTable(snapshot.data);
+        }
+        if (null == snapshot.data || snapshot.data.length == 0) {
+          return Text("no Data found");
+        }
+        return CircularProgressIndicator();
+      },
+    );
+  }
+
+
+
 
   Widget topAppBar(BuildContext context) {
     return new AppBar(
@@ -39,6 +78,7 @@ class ListPage extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => CustomDialog()),
               );
+              refreshList();
               //AppBuilder.of(context).rebuild();
             })
       ],
@@ -65,33 +105,18 @@ class ListPage extends StatelessWidget {
     ),
   );
 
-  Widget _taskListView(
-      BuildContext context) {
-    return FutureBuilder<List<Task>>(
-      future: db.getAllTasks(),
-      builder: (BuildContext context, AsyncSnapshot<List<Task>> snapshot) {
-
-      switch (snapshot.connectionState) {
-        case ConnectionState.none:
-          return Text('Press button to start.');
-        case ConnectionState.active:
-        case ConnectionState.waiting:
-          return Text('Awaiting result...');
-        case ConnectionState.done:
-          if (snapshot.hasError)
-            return Text('Error: ${snapshot.error}', style: new TextStyle(color: Colors.white),);
+  dataTable(List<Task> taskList) {
           return ListView.builder(
-            itemCount: snapshot.data.length,
-            key: key,
+            itemCount: taskList.length,
             itemBuilder: (context, index) {
               return Dismissible(
                   child: Card(
-                      color: snapshot.data[index].returnPriorityColor(),
+                      color: taskList[index].returnPriorityColor(),
                       child: Padding(
                         child: Row(
                           children: <Widget>[
                             Text(
-                              snapshot.data[index].getTaskName,
+                              taskList[index].getTaskName,
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 20.0,
@@ -101,14 +126,20 @@ class ListPage extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.all(10.0),
                       )),
-                  key: new Key(snapshot.data[index].id),
+                  key: new Key(taskList[index].id.toString()),
                   onDismissed: (direction) {
-                    dataService.removeTask(snapshot.data[index]);
+                    setState(() {
+                      db.delete(taskList[index].id);
+                      taskList.removeAt(index);
+                    });
+                    //refreshList();
                   });
             },
           );
-      }
-      },
-    );
   }
+
+
+
+
+
 }
