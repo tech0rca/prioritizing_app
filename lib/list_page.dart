@@ -55,7 +55,7 @@ class ListPage extends StatefulWidget {
           return dataTable(snapshot.data);
         }
         if (null == snapshot.data || snapshot.data.length == 0) {
-          return Text("no Data found");
+          return addSomeTasksText();
         }
         return CircularProgressIndicator();
       },
@@ -105,6 +105,18 @@ class ListPage extends StatefulWidget {
     ),
   );
 
+  addSomeTasksText() {
+    return Center(
+      child: Container(child: new Text(
+        'Add Some Tasks!',
+        style: new TextStyle(
+          color: Colors.white,
+          fontSize: 40.0,
+          fontWeight: FontWeight.w200)
+      ),
+      ),
+    );
+  }
   dataTable(List<Task> taskList) {
           return ListView.builder(
             itemCount: taskList.length,
