@@ -37,7 +37,7 @@ class DatabaseHelper {
 
   Future _onCreate(Database db, int version) async {
         await db.execute('''CREATE TABLE tasks(
-          id INTEGER PRIMARY KEY,
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
           taskName TEXT,
           dueDate TEXT,
           priority TEXT
@@ -81,7 +81,9 @@ class DatabaseHelper {
 
   Future<int> delete(int id) async {
     Database db = await database;
-    return await db.delete(DatabaseHelper._tableName, where: '$id = ?', whereArgs: [id]);
+    int deletedId = await db.rawDelete('DELETE FROM tasks WHERE id = ?', [id]);
+    print('deleted with id: $deletedId');
+    return deletedId;
   }
 
 
