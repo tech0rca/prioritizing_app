@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prioritizing_app/data_service.dart';
-import 'package:prioritizing_app/database_helper.dart';
+import 'database_helper.dart';
 import 'package:uuid/uuid.dart';
 
 import 'list_page.dart';

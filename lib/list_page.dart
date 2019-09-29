@@ -69,7 +69,7 @@ class ListPage extends StatefulWidget {
     return new AppBar(
       elevation: 0.1,
       backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
-      title: Text('Tasks'),
+      title: Text('Tasks',style: TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold),),
       actions: <Widget>[
         IconButton(
             icon: Icon(Icons.add),
@@ -124,19 +124,26 @@ class ListPage extends StatefulWidget {
               return Dismissible(
                   child: Card(
                       color: taskList[index].returnPriorityColor(),
-                      child: Padding(
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              taskList[index].getTaskName,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.w200),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
+                      child: ClipPath(
+                        child: Container(
+                          height: 100,
+                          child: Padding(
+                            child: Row(
+                              children: <Widget>[
+                                
+                                Text(
+                                  taskList[index].getTaskName,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.w200),
+                                ),
+                              ],
                             ),
-                          ],
+                            padding: const EdgeInsets.all(10.0),
+                          ),
                         ),
-                        padding: const EdgeInsets.all(10.0),
                       )),
                   key: new Key(taskList[index].id.toString()),
                   onDismissed: (direction) {
