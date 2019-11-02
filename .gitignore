@@ -7,3 +7,7 @@ prioritizing_app.iml
 flutter_projects.iml
 /.idea
 /assets
+.flutter-plugins
+.metadata
+.packages
+.vscode/launch.json

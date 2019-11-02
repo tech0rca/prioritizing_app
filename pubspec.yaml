@@ -22,6 +22,7 @@ dependencies:
   uuid: 2.0.1
   sqflite:
   path_provider:
+  share:
   path:
 
   # The following adds the Cupertino Icons font to your application.

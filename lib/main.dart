@@ -10,10 +10,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Sira App',
       theme: ThemeData(
         primaryColor: Color.fromRGBO(58, 66, 86, 1.0),
         primarySwatch: Colors.blue,
+        canvasColor: Colors.transparent
       ),
       home: ListPage(),
     );
@@ -45,8 +46,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListView(
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.map),
-              title: Text('Map')
+              leading: Icon(Icons.list),
+              title: Text('List')
             ),
             ListTile(
               leading: Icon(Icons.photo_album),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prioritizing_app/app_builder.dart';
+import 'package:prioritizing_app/bottom_bar.dart';
 import 'package:prioritizing_app/custom_dialog.dart';
 import 'package:prioritizing_app/data_service.dart';
 import 'package:prioritizing_app/database_helper.dart';
@@ -42,7 +43,7 @@ class ListPage extends StatefulWidget {
         backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
         appBar: topAppBar(context),
         body: _taskListView(context),
-        bottomNavigationBar: makeBottom,
+        bottomNavigationBar:BottomBarWidget(context)
       );
     });
   }
@@ -69,7 +70,7 @@ class ListPage extends StatefulWidget {
     return new AppBar(
       elevation: 0.1,
       backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
-      title: Text('Tasks',style: TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold),),
+      title: Text('Sira',style: TextStyle(fontSize: 36.0, fontWeight: FontWeight.w400),),
       actions: <Widget>[
         IconButton(
             icon: Icon(Icons.add),
@@ -84,26 +85,6 @@ class ListPage extends StatefulWidget {
       ],
     );
   }
-
-  final makeBottom = Container(
-    height: 55.0,
-    child: BottomAppBar(
-      color: Color.fromRGBO(58, 66, 86, 1.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          IconButton(
-            icon: Icon(Icons.home, color: Colors.white),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.blur_on, color: Colors.white),
-            onPressed: () {},
-          ),
-        ],
-      ),
-    ),
-  );
 
   addSomeTasksText() {
     return Center(
@@ -122,29 +103,40 @@ class ListPage extends StatefulWidget {
             itemCount: taskList.length,
             itemBuilder: (context, index) {
               return Dismissible(
-                  child: Card(
-                      color: taskList[index].returnPriorityColor(),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
-                      child: ClipPath(
-                        child: Container(
-                          height: 100,
-                          child: Padding(
-                            child: Row(
-                              children: <Widget>[
-                                
-                                Text(
-                                  taskList[index].getTaskName,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 24.0,
-                                      fontWeight: FontWeight.w200),
-                                ),
-                              ],
+                  child: Container(
+                    decoration: new BoxDecoration(boxShadow: [
+                      new BoxShadow(
+                        offset: new Offset(0.0, 10.0),
+                        color: Colors.black38,
+                        blurRadius: 10.0,
+                      )
+                    ]),
+                    child: Card(
+                        color: taskList[index].returnPriorityColor(),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                        child: ClipPath(
+                          child: Container(
+                            height: 90,
+                            child: Padding(
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.all(20),
+                                    child: Text(
+                                      taskList[index].getTaskName,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 26.0,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              padding: const EdgeInsets.all(10.0),
                             ),
-                            padding: const EdgeInsets.all(10.0),
                           ),
-                        ),
-                      )),
+                        )),
+                  ),
                   key: new Key(taskList[index].id.toString()),
                   onDismissed: (direction) {
                     setState(() {
