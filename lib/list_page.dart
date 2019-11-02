@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prioritizing_app/app_builder.dart';
+import 'package:prioritizing_app/bottom_bar.dart';
 import 'package:prioritizing_app/custom_dialog.dart';
 import 'package:prioritizing_app/data_service.dart';
 import 'package:prioritizing_app/database_helper.dart';
@@ -42,7 +43,7 @@ class ListPage extends StatefulWidget {
         backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
         appBar: topAppBar(context),
         body: _taskListView(context),
-        bottomNavigationBar: makeBottom,
+        bottomNavigationBar:BottomBarWidget(context)
       );
     });
   }
@@ -84,26 +85,6 @@ class ListPage extends StatefulWidget {
       ],
     );
   }
-
-  final makeBottom = Container(
-    height: 55.0,
-    child: BottomAppBar(
-      color: Color.fromRGBO(58, 66, 86, 1.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          IconButton(
-            icon: Icon(Icons.home, color: Colors.white),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.blur_on, color: Colors.white),
-            onPressed: () {},
-          ),
-        ],
-      ),
-    ),
-  );
 
   addSomeTasksText() {
     return Center(
